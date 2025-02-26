@@ -135,10 +135,10 @@ if __name__ == "__main__":
     argon2id_memory_cost_insane = 74*1024
 
     # Scrypt Parameters
-    scrypt_time_cost_low = 2**11
-    scrypt_time_cost_medium = 2**13
-    scrypt_time_cost_high = 2**15
-    scrypt_time_cost_insane = 2**17
+    scrypt_time_cost_low = 1 << 11        # 2^11
+    scrypt_time_cost_medium = 1 << 13     # 2^13
+    scrypt_time_cost_high = 1 << 15       # 2^15
+    scrypt_time_cost_insane = 1 << 17     # 2^17
     
     scrypt_memory_cost_low = 4
     scrypt_memory_cost_medium = 8
