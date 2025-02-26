@@ -123,29 +123,113 @@ def decrypt(base64_data, password, salt_size=None, iterations=None, hash_algo=No
 
 # Example Usage
 if __name__ == "__main__":
-    password = "securepassword"
-    plaintext = "This is a secret message."
+    # Argon2Id Parameters
+    argon2id_time_cost_low = 2
+    argon2id_time_cost_medium = 4
+    argon2id_time_cost_high = 6
+    argon2id_time_cost_insane = 12
+
+    argon2id_memory_cost_low = 19*1024
+    argon2id_memory_cost_medium = 28*1024
+    argon2id_memory_cost_high = 37*1024
+    argon2id_memory_cost_insane = 74*1024
+
+    # Scrypt Parameters
+    scrypt_time_cost_low = 2**11
+    scrypt_time_cost_medium = 2**13
+    scrypt_time_cost_high = 2**15
+    scrypt_time_cost_insane = 2**17
     
-    # Encrypt with AES-GCM using PBKDF2
-    encrypted_data = encrypt(plaintext, password, salt_size=16, iterations=400000, hash_algo='sha3_256', use_chacha=False, kdf_algo='pbkdf2')
-    print(f"Encrypted (AES-GCM, PBKDF2): {encrypted_data}")
+    scrypt_memory_cost_low = 4
+    scrypt_memory_cost_medium = 8
+    scrypt_memory_cost_high = 12
+    scrypt_memory_cost_insane = 16
 
-    # Decrypt the AES-GCM data using PBKDF2
-    decrypted_data = decrypt(encrypted_data, password, salt_size=16, iterations=400000, hash_algo='sha3_256', use_chacha=False, kdf_algo='pbkdf2')
-    print(f"Decrypted (AES-GCM, PBKDF2): {decrypted_data}")
+    # PBKDF2 Parameters
+    pbkdf2_time_cost_low = 400000
+    pbkdf2_time_cost_medium = 600000
+    pbkdf2_time_cost_high = 800000
+    pbkdf2_time_cost_insane = 1200000
 
-    # Encrypt with AES-GCM using scrypt
-    encrypted_data_chacha = encrypt(plaintext, password, salt_size=16, iterations=2**11, memory_cost=4, use_chacha=False, kdf_algo='scrypt')
-    print(f"Encrypted (AES-GCM, scrypt): {encrypted_data_chacha}")
-
-    # Decrypt the AES-GCM data using scrypt
-    decrypted_data_chacha = decrypt(encrypted_data_chacha, password, salt_size=16, iterations=2**11, memory_cost=4, use_chacha=False, kdf_algo='scrypt')
-    print(f"Decrypted (AES-GCM, scrypt): {decrypted_data_chacha}")
+    pbkdf2_sha3_size_256 = 'sha3_256'
+    pbkdf2_sha3_size_384 = 'sha3_256'
+    pbkdf2_sha3_size_512 = 'sha3_512'
+    
+    # Salt sizes
+    salt_size_16 = 16
+    salt_size_32 = 32
+    salt_size_48 = 48
+    salt_size_64 = 64
+    
+    # Encryption & Decryption Operations
+    password = "MySecurePassword"
+    plaintext = "This is a secret message."
 
     # Encrypt with AES-GCM using Argon2id
-    encrypted_data_argon2id = encrypt(plaintext, password, salt_size=16, iterations=2, memory_cost=19*1024, use_chacha=False, kdf_algo='argon2id')
+    encrypted_data_argon2id = encrypt(
+        plaintext,
+        password,
+        salt_size=salt_size_16,
+        iterations=argon2id_time_cost_low,
+        memory_cost=argon2id_memory_cost_low,
+        use_chacha=False,
+        kdf_algo='argon2id'
+    )
     print(f"Encrypted (AES-GCM, Argon2id): {encrypted_data_argon2id}")
 
-    # Decrypt the AES-GCM data using Argon2id
-    decrypted_data_argon2id = decrypt(encrypted_data_argon2id, password, salt_size=16, iterations=2, memory_cost=19*1024, use_chacha=False, kdf_algo='argon2id')
+    decrypted_data_argon2id = decrypt(
+        encrypted_data_argon2id,
+        password,
+        salt_size=salt_size_16,
+        iterations=argon2id_time_cost_low,
+        memory_cost=argon2id_memory_cost_low,
+        use_chacha=False,
+        kdf_algo='argon2id'
+    )
     print(f"Decrypted (AES-GCM, Argon2id): {decrypted_data_argon2id}")
+
+    # Encrypt with AES-GCM using scrypt
+    encrypted_data_scrypt = encrypt(
+        plaintext,
+        password,
+        salt_size=salt_size_16,
+        iterations=scrypt_time_cost_low,
+        memory_cost=scrypt_memory_cost_low,
+        use_chacha=False,
+        kdf_algo='scrypt'
+    )
+    print(f"Encrypted (AES-GCM, scrypt): {encrypted_data_chacha}")
+
+    decrypted_data_scrypt = decrypt(
+        encrypted_data_scrypt,
+        password,
+        salt_size=salt_size_16,
+        iterations=scrypt_time_cost_low,
+        memory_cost=scrypt_memory_cost_low,
+        use_chacha=False,
+        kdf_algo='scrypt'
+    )
+    print(f"Decrypted (AES-GCM, scrypt): {decrypted_data_scrypt}")
+    
+    # Encrypt with AES-GCM using PBKDF2
+    encrypted_data_pbkdf2 = encrypt(
+        plaintext,
+        password,
+        salt_size=salt_size_16,
+        iterations=pbkdf2_time_cost_low,
+        hash_algo=pbkdf2_sha3_size_256,
+        use_chacha=False,
+        kdf_algo='pbkdf2'
+    )
+    print(f"Encrypted (AES-GCM, PBKDF2): {encrypted_data_pbkdf2}")
+
+    decrypted_data_pbkdf2 = decrypt(
+        encrypted_data_pbkdf2,
+        password,
+        salt_size=salt_size_16,
+        iterations=pbkdf2_time_cost_low,
+        hash_algo=pbkdf2_sha3_size_256,
+        use_chacha=False,
+        kdf_algo='pbkdf2'
+    )
+    print(f"Decrypted (AES-GCM, PBKDF2): {decrypted_data_pbkdf2}")
