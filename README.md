@@ -1,5 +1,7 @@
 # Encryptator_Python3
-Python3 scripts to use with Encryptator
+Python3 script to use with [Encryptator](https://play.google.com/store/apps/details?id=lu.monks.banalapps.encryptator).
+
+This script is provided for transparency purposes to the users who want to prove themselves that the application is secure to use.
 
 ## How to use this script
 ```
