@@ -3,6 +3,8 @@ Python3 script to use with [Encryptator](https://play.google.com/store/apps/deta
 
 This script is provided for transparency purposes to the users who want to prove themselves that the application is secure to use.
 
+It currently only supports text encryption. File encryption will be added soon.
+
 ## How to use this script
 ```
 git clone https://github.com/BanalApps/Encryptator_Python3.git
