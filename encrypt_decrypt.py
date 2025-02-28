@@ -160,76 +160,179 @@ if __name__ == "__main__":
     salt_size_32 = 32
     salt_size_48 = 48
     salt_size_64 = 64
-    
-    # Encryption & Decryption Operations
-    password = "MySecurePassword"
-    plaintext = "This is a secret message."
 
-    # Encrypt with AES-GCM using Argon2id
-    encrypted_data_argon2id = encrypt(
-        plaintext,
-        password,
-        salt_size=salt_size_16,
-        iterations=argon2id_time_cost_low,
-        memory_cost=argon2id_memory_cost_low,
-        use_chacha=False,
-        kdf_algo='argon2id'
-    )
-    print(f"Encrypted (AES-GCM, Argon2id): {encrypted_data_argon2id}")
+    # Parallelism
+    parallelism_argon2id = 1
+    parallelism_scrypt = 1
 
-    decrypted_data_argon2id = decrypt(
-        encrypted_data_argon2id,
-        password,
-        salt_size=salt_size_16,
-        iterations=argon2id_time_cost_low,
-        memory_cost=argon2id_memory_cost_low,
-        use_chacha=False,
-        kdf_algo='argon2id'
-    )
-    print(f"Decrypted (AES-GCM, Argon2id): {decrypted_data_argon2id}")
 
-    # Encrypt with AES-GCM using scrypt
-    encrypted_data_scrypt = encrypt(
-        plaintext,
-        password,
-        salt_size=salt_size_16,
-        iterations=scrypt_time_cost_low,
-        memory_cost=scrypt_memory_cost_low,
-        use_chacha=False,
-        kdf_algo='scrypt'
-    )
-    print(f"Encrypted (AES-GCM, scrypt): {encrypted_data_scrypt}")
 
-    decrypted_data_scrypt = decrypt(
-        encrypted_data_scrypt,
-        password,
-        salt_size=salt_size_16,
-        iterations=scrypt_time_cost_low,
-        memory_cost=scrypt_memory_cost_low,
-        use_chacha=False,
-        kdf_algo='scrypt'
-    )
-    print(f"Decrypted (AES-GCM, scrypt): {decrypted_data_scrypt}")
-    
-    # Encrypt with AES-GCM using PBKDF2
-    encrypted_data_pbkdf2 = encrypt(
-        plaintext,
-        password,
-        salt_size=salt_size_16,
-        iterations=pbkdf2_time_cost_low,
-        hash_algo=pbkdf2_sha3_size_256,
-        use_chacha=False,
-        kdf_algo='pbkdf2'
-    )
-    print(f"Encrypted (AES-GCM, PBKDF2): {encrypted_data_pbkdf2}")
 
-    decrypted_data_pbkdf2 = decrypt(
-        encrypted_data_pbkdf2,
-        password,
-        salt_size=salt_size_16,
-        iterations=pbkdf2_time_cost_low,
-        hash_algo=pbkdf2_sha3_size_256,
-        use_chacha=False,
-        kdf_algo='pbkdf2'
-    )
-    print(f"Decrypted (AES-GCM, PBKDF2): {decrypted_data_pbkdf2}")
+    # Prompt for AES or ChaCha encryption
+    print("Choose encryption algorithm:")
+    print(f"1. AES")
+    print(f"2. ChaCha20")
+    cipher_choice = int(input("Enter the number of your choice: "))
+    use_chacha = (cipher_choice == 2)
+
+    # Prompt for salt size
+    print("Choose salt size:")
+    print(f"1. {salt_size_16} bytes")
+    print(f"2. {salt_size_32} bytes")
+    print(f"3. {salt_size_48} bytes")
+    print(f"4. {salt_size_64} bytes")
+    salt_choice = int(input("Enter the number of your choice: "))
+    salt_size_options = {1: salt_size_16, 2: salt_size_32, 3: salt_size_48, 4: salt_size_64}
+    salt_size = salt_size_options.get(salt_choice, salt_size_16)
+
+    # Prompt for KDF function
+    print("Choose KDF algorithm:")
+    print(f"1. Argon2id")
+    print(f"2. Scrypt")
+    print(f"3. PBKDF2")
+    kdf_choice = int(input("Enter the number of your choice: "))
+
+    # Initialize KDF-specific parameters
+    hash_algo = None
+    memory_cost = None
+    parallelism = None
+    iterations = None
+
+    # If Argon2id is chosen, prompt for time cost, memory cost, and parallelism
+    if kdf_choice == 1:
+        print("Choose time cost for Argon2id:")
+        print(f"1. {argon2id_time_cost_low} iterations")
+        print(f"2. {argon2id_time_cost_medium} iterations")
+        print(f"3. {argon2id_time_cost_high} iterations")
+        print(f"4. {argon2id_time_cost_insane} iterations")
+        argon2id_time_choice = int(input("Enter the number of your choice: "))
+        argon2id_time_options = {
+            1: argon2id_time_cost_low,
+            2: argon2id_time_cost_medium,
+            3: argon2id_time_cost_high,
+            4: argon2id_time_cost_insane,
+        }
+        iterations = argon2id_time_options.get(argon2id_time_choice, argon2id_time_cost_low)
+
+        # Prompt for memory cost for Argon2id
+        print("Choose memory cost for Argon2id:")
+        print(f"1. {argon2id_memory_cost_low} MiB")
+        print(f"2. {argon2id_memory_cost_medium} MiB")
+        print(f"3. {argon2id_memory_cost_high} MiB")
+        print(f"4. {argon2id_memory_cost_insane} MiB")
+        argon2id_memory_choice = int(input("Enter the number of your choice: "))
+        argon2id_memory_options = {
+            1: argon2id_memory_cost_low,
+            2: argon2id_memory_cost_medium,
+            3: argon2id_memory_cost_high,
+            4: argon2id_memory_cost_insane,
+        }
+        memory_cost = argon2id_memory_options.get(argon2id_memory_choice, argon2id_memory_cost_low)
+
+        parallelism = parallelism_argon2id
+
+    # If Scrypt is chosen, prompt for memory cost and iterations
+    elif kdf_choice == 2:
+        print("Choose number of iterations for Scrypt:")
+        print(f"1. {scrypt_time_cost_low}")
+        print(f"2. {scrypt_time_cost_medium}")
+        print(f"3. {scrypt_time_cost_high}")
+        print(f"4. {scrypt_time_cost_insane}")
+        scrypt_iterations_choice = int(input("Enter the number of your choice: "))
+        scrypt_iterations_options = {
+            1: scrypt_time_cost_low,
+            2: scrypt_time_cost_medium,
+            3: scrypt_time_cost_high,
+            4: scrypt_time_cost_insane,
+        }
+        iterations = scrypt_iterations_options.get(scrypt_iterations_choice, scrypt_time_cost_low)
+
+        # Prompt for memory cost for Scrypt
+        print("Choose memory cost for Scrypt:")
+        print(f"1. {scrypt_memory_cost_low} MiB")
+        print(f"2. {scrypt_memory_cost_medium} MiB")
+        print(f"3. {scrypt_memory_cost_high} MiB")
+        print(f"4. {scrypt_memory_cost_insane} MiB")
+        scrypt_memory_choice = int(input("Enter the number of your choice: "))
+        scrypt_memory_options = {
+            1: scrypt_memory_cost_low,
+            2: scrypt_memory_cost_medium,
+            3: scrypt_memory_cost_high,
+            4: scrypt_memory_cost_insane,
+        }
+        memory_cost = scrypt_memory_options.get(scrypt_memory_choice, scrypt_memory_cost_low)
+
+        parallelism = parallelism_scrypt
+
+    # If PBKDF2 is chosen, prompt for hash algorithm
+    elif kdf_choice == 3:
+        print("Choose hashing algorithm for PBKDF2:")
+        print(f"1. {pbkdf2_sha3_size_256}")
+        print(f"2. {pbkdf2_sha3_size_384}")
+        print(f"3. {pbkdf2_sha3_size_512}")
+        hash_choice = int(input("Enter the number of your choice: "))
+        if hash_choice == 1:
+            hash_algo = pbkdf2_sha3_size_256
+        elif hash_choice == 2:
+            hash_algo = pbkdf2_sha3_size_384
+        elif hash_choice == 3:
+            hash_algo = pbkdf2_sha3_size_512
+        else:
+            raise ValueError("Invalid choice for hashing algorithm.")
+
+        # Prompt for PBKDF2 iterations
+        print("Choose number of iterations for PBKDF2:")
+        print(f"1. {pbkdf2_time_cost_low}")
+        print(f"2. {pbkdf2_time_cost_medium}")
+        print(f"3. {pbkdf2_time_cost_high}")
+        print(f"4. {pbkdf2_time_cost_insane}")
+        pbkdf2_iterations_choice = int(input("Enter the number of your choice: "))
+        pbkdf2_iterations_options = {
+            1: pbkdf2_time_cost_low,
+            2: pbkdf2_time_cost_medium,
+            3: pbkdf2_time_cost_high,
+            4: pbkdf2_time_cost_insane,
+        }
+        iterations = pbkdf2_iterations_options.get(pbkdf2_iterations_choice, pbkdf2_time_cost_low)
+
+    else:
+        raise ValueError("Invalid choice for KDF algorithm.")
+
+    # Prompt for encrypt or decrypt
+    print("Choose operation:")
+    print(f"1. Encrypt")
+    print(f"2. Decrypt")
+    operation_choice = int(input("Enter the number of your choice: "))
+    operation = "encrypt" if operation_choice == 1 else "decrypt"
+
+    # Prompt for password and input
+    password = input("Enter password: ")
+    base64_input = input("Enter input data: ")
+
+    # Execute the operation
+    if operation == 'encrypt':
+        result = encrypt(
+            plaintext=base64_input, 
+            password=password, 
+            salt_size=salt_size, 
+            iterations=iterations, 
+            hash_algo=hash_algo, 
+            use_chacha=use_chacha, 
+            kdf_algo=['argon2id', 'scrypt', 'pbkdf2'][kdf_choice-1], 
+            memory_cost=memory_cost, 
+            parallelism=parallelism
+        )
+        print(f"Encrypted Data:\n{result}")
+    else:
+        result = decrypt(
+            base64_data=base64_input, 
+            password=password, 
+            salt_size=salt_size, 
+            iterations=iterations, 
+            hash_algo=hash_algo, 
+            use_chacha=use_chacha, 
+            kdf_algo=['argon2id', 'scrypt', 'pbkdf2'][kdf_choice-1], 
+            memory_cost=memory_cost, 
+            parallelism=parallelism
+        )
+        print(f"Decrypted Data:\n{result}")
