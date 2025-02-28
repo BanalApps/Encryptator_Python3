@@ -198,7 +198,7 @@ if __name__ == "__main__":
         use_chacha=False,
         kdf_algo='scrypt'
     )
-    print(f"Encrypted (AES-GCM, scrypt): {encrypted_data_chacha}")
+    print(f"Encrypted (AES-GCM, scrypt): {encrypted_data_scrypt}")
 
     decrypted_data_scrypt = decrypt(
         encrypted_data_scrypt,
