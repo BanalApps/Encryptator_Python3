@@ -5,6 +5,8 @@ This script is provided for transparency purposes to the users who want to prove
 
 It currently only supports text encryption. File encryption will be added soon.
 
+***Any meaningful contribution to this side project is appreciated. You can reach out and create pull requests or forks to propose improvements.***
+
 ## How to use this script
 ```
 git clone https://github.com/BanalApps/Encryptator_Python3.git
