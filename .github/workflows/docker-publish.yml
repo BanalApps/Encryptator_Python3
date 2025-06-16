@@ -3,7 +3,7 @@ name: Build and Publish Docker Image
 on:
   push:
     branches:
-      - main
+      - dev
     paths:
       - Dockerfile
       - .github/workflows/docker-publish.yml
