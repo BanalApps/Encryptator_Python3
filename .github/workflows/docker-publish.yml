@@ -3,10 +3,8 @@ name: Build and Publish Docker Image
 on:
   push:
     branches:
+      - main
       - dev
-    paths:
-      - Dockerfile
-      - .github/workflows/docker-publish.yml
 
 jobs:
   build-and-push:
@@ -27,10 +25,11 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build Docker image
-        run: |
-          docker build -t ghcr.io/banalapps/encryptator_python3:latest .
-
-      - name: Push Docker image
-        run: |
-          docker push ghcr.io/banalapps/encryptator_python3:latest
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/banalapps/encryptator_python3:latest
+          provenance: false
+          visibility: public
