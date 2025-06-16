@@ -9,11 +9,11 @@ It currently only supports text encryption. File encryption will be added soon.
 
 ## How to use this script
 ```
-# docker run -it --rm ghcr.io/banalapps/encryptator_python3:latest
+docker run -it --rm ghcr.io/banalapps/encryptator_python3:latest
 ```
 ## Example encryption
 ```
-# docker run -it --rm ghcr.io/banalapps/encryptator_python3:latest
+docker run -it --rm ghcr.io/banalapps/encryptator_python3:latest
 Choose encryption algorithm:
 1. AES
 2. ChaCha20
