@@ -9,15 +9,11 @@ It currently only supports text encryption. File encryption will be added soon.
 
 ## How to use this script
 ```
-git clone https://github.com/BanalApps/Encryptator_Python3.git
-cd ./Encryptator_Python3
-python3 -m venv encryptator
-./encryptator/bin/pip3 install -r requirements.txt
-./encryptator/bin/python3 encrypt_decrypt.py
+# docker run -it --rm ghcr.io/banalapps/encryptator_python3:latest
 ```
 ## Example encryption
 ```
-~/Encryptator_Python$ ./encryptator/bin/python3 encrypt_decrypt.py
+# docker run -it --rm ghcr.io/banalapps/encryptator_python3:latest
 Choose encryption algorithm:
 1. AES
 2. ChaCha20
@@ -57,7 +53,7 @@ Bb3DS8N79cJWDAS9IsjNaNRPiXfh2dhPSA6OqdDi1svaEtxp34TNS2HtOULmDmtE6bskMgfIRcubT8q6
 
 ## Example decryption
 ```
-./encryptator/bin/python3 encrypt_decrypt.py
+# docker run -it --rm ghcr.io/banalapps/encryptator_python3:latest
 Choose encryption algorithm:
 1. AES
 2. ChaCha20
