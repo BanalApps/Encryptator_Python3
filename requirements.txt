@@ -1,2 +1,2 @@
-cryptography
-argon2-cffi
+cryptography==45.0.4
+argon2-cffi==25.1.0
