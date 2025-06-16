@@ -11,6 +11,7 @@ It currently only supports text encryption. File encryption will be added soon.
 ```
 docker run -it --rm ghcr.io/banalapps/encryptator_python3:latest
 ```
+
 ## Example encryption
 ```
 docker run -it --rm ghcr.io/banalapps/encryptator_python3:latest
